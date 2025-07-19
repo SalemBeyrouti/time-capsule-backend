@@ -2,19 +2,52 @@
 
 namespace App\Services\Common;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+
 
 class AuthService
 {
 
-    static function login(Request $request) {
+
+    static function login(Request $request){
         $request->validate([
             'email'=>'required|string|email',
-            'password'=>'required|string',
+            'password' => 'required|string',
+
         ]);
-        $credentials = $requst->
+        $credentials = $request->only('email', 'password');
+        $token = auth('api')->attempt($credentials);
+
+
+        if (!$token) {
+            return null;
+        }
+
+        $user = auth('api')->user();
+        $user->token = $token;
+        return $user;
+    }
+
+    static function register(Request $request) {
+        $request->validate([
+            'name'=> 'required|string|max:255',
+            'email'=>'required|string|email|max:255|unique:users',
+            'password'=>'required|string|min:6',
+        ]);
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // $token = Auth::login($user);
+        $token = JWTAuth::fromUser($user);
+        $user->token = $token;
+        return $user;
 
     }
     

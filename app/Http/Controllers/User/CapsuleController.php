@@ -6,17 +6,34 @@ use App\Models\Capsule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\User\CapsuleService;
+use Illuminate\Support\Facades\Auth;
 
 
 class CapsuleController extends Controller
 {
+
+   
     function getAllCapsules(){
         $capsules = CapsuleService::getAllCapsules();
         return $this->responseJSON($capsules);
 
     }
 
+    function getMyCapsules(){
+        $user = Auth::user();
+        if(!$user) {
+            return $this->responseJSON("unauthroized", 401);
+        }
+
+        $capsules = CapsuleService::getUserCapsules($user->id);
+        return $this->responseJSON($capsules);
+    }
+
     function addOrUpdateCapsule(Request $request, $id = null) {
+         $user = Auth::user();
+         if (!$user)  {
+             return $this->responseJSON("unauthorized", 401);
+    }
         $capsule = new Capsule;
         if($id) {
             $capsule = CapsuleService::getAllCapsules($id);
@@ -26,7 +43,7 @@ class CapsuleController extends Controller
             }
         }
 
-        $capsule = CapsuleService::createOrUpdateCapsule($request->all(), $capsule);
+        $capsule = CapsuleService::createOrUpdateCapsule($request->all(), $capsule, $user);
         return $this->responseJSON($capsule);
     }
 }

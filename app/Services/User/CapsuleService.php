@@ -18,8 +18,12 @@ class CapsuleService
         
     }
 
-    static function createOrUpdateCapsule($data, $capsule){
-        $capsule->user_id = $data["user_id"] ?? $capsule->user_id;
+    public static function getUserCapsules($userId) {
+        return Capsule::where('user_id', $userId)->get();
+    }
+
+    static function createOrUpdateCapsule($data, $capsule, $user){
+        $capsule->user_id = $capsule->user_id ?? $user->id;
         $capsule->title = $data["title"] ?? $capsule->title;
         $capsule->message = $data["message"] ?? $capsule->message;
         $capsule->revealed_at = $data['revealed_at'] ?? $capsule->revealed_at;
