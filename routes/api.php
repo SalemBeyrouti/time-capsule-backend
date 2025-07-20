@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Common\AuthController;
 use App\Http\Controllers\User\CapsuleController;
 use App\Http\Controllers\User\LocationController;
+use App\Http\Controllers\User\MediaController;
 
 
 Route::group(["prefix" => "v0.1"], function () {
@@ -20,6 +21,9 @@ Route::group(["prefix" => "v0.1"], function () {
         Route::get('/mycapsules', [CapsuleController::class, 'getMyCapsules']);
         Route::post('/locations', [LocationController::class, 'store']);
         Route::get('/capsules/by-country/{country}', [LocationController::class, 'getByCountry']);
+        Route::post('/capsules/{id}/media', [MediaController::class, 'storeMedia']);
+        Route::get('/capsule/{capsuleId}/media', [MediaController::class, 'getMedia']);
+
 
     });
 });

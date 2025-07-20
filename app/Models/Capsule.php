@@ -13,4 +13,8 @@ class Capsule extends Model
     public function location(){
         return $this->hasOne(Location::class);
     }
+
+    public function media(){
+        return $this->hasMany(Media::class);
+    }
 }
