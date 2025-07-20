@@ -2,10 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\MediaController;
 use App\Http\Controllers\Common\AuthController;
 use App\Http\Controllers\User\CapsuleController;
 use App\Http\Controllers\User\LocationController;
-use App\Http\Controllers\User\MediaController;
+use App\Http\Controllers\User\PublicWallController;
+
 
 
 Route::group(["prefix" => "v0.1"], function () {
@@ -24,6 +26,7 @@ Route::group(["prefix" => "v0.1"], function () {
         Route::get('/capsules/by-country/{country}', [LocationController::class, 'getByCountry']);
         Route::post('/capsules/{id}/media', [MediaController::class, 'storeMedia']);
         Route::get('/capsule/{capsuleId}/media', [MediaController::class, 'getMedia']);
+        Route::get('/public-wall', [PublicWallController::class, 'index']);
 
 
     });

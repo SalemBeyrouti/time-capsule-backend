@@ -50,4 +50,27 @@ class CapsuleService
         return Capsule::with('tags')->find($capsule->id);
 
     }
+
+    static function getPublicWallCapsules($filters = []) {
+        $query = Capsule::with(['tags', 'media', 'location', 'user']) -> where('visibility', 'public') -> where('revealed_at', '<=', now());
+
+        if ($country = $filters['country'] ?? null) {
+         $query->whereRelation('location', 'country', $country);
+        }
+
+        if($mood = $filters['mood'] ?? null) {
+            $query->where('emoji', $mood);
+        }
+
+        if (!empty($filters['start_date']) && !empty($filters['end_date'])) {
+         $query->whereBetween('revealed_at', [
+         $filters['start_date'],
+         $filters['end_date']
+         ]);
+        }
+
+        $capsules = $query->latest()->get();
+
+        return $capsules ->map(fn($capsule) => $capsule->formatCapsulePreview());
+    }
 }

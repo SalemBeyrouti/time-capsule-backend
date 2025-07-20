@@ -21,6 +21,10 @@ class User extends Authenticatable implements JWTSubject
         return[];
     }
 
+    public function capsules(){
+        return $this->hasMany(Capsule::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
