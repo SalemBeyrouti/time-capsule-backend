@@ -10,7 +10,8 @@ class PublicWallController extends Controller
 {
     public function index(Request $request) {
         $filters = $request->only(['country', 'mood', 'start_date', 'end_date']);
-        $capsules = CapsuleService::getPublicWallCapsules($filters);
+        $perPage = $request->get('per_page', 9);
+        $capsules = CapsuleService::getPublicWallCapsules($filters, $perPage);
 
         return $this->responseJSON($capsules);
     }

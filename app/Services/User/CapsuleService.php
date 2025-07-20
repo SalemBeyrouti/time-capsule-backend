@@ -69,8 +69,13 @@ class CapsuleService
          ]);
         }
 
-        $capsules = $query->latest()->get();
+        $capsules = $query->latest()->paginate(9);
 
-        return $capsules ->map(fn($capsule) => $capsule->formatCapsulePreview());
+        $formatted = $capsules ->getCollection()->map(function ($capsule) {
+            return $capsule->formatCapsulePreview();
+        });
+        $capsules->setCollection($formatted);
+        return $capsules;
+
     }
 }
