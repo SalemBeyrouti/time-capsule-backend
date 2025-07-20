@@ -29,6 +29,15 @@ class CapsuleController extends Controller
         return $this->responseJSON($capsules);
     }
 
+    function getCapsuleById($id){
+        $capsule = CapsuleService::getAllCapsules($id);
+
+        if(!$capsule){
+            return $this->responseJSON("capsule not found", 404);
+        }
+        return $this->responseJSON($capsule);
+    }
+
     function addOrUpdateCapsule(Request $request, $id = null) {
          $user = Auth::user();
          if (!$user)  {

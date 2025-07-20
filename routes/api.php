@@ -17,6 +17,7 @@ Route::group(["prefix" => "v0.1"], function () {
     Route::group(["middleware" => "auth:api"], function () {
     Route::group(["prefix" => "user"], function () {
         Route::get("/capsules", [CapsuleController::class, "getAllCapsules"]);
+        Route::get('/capsules/{id}', [CapsuleController::class, 'getCapsuleById']);
         Route::post("/add_update_capsule/{id?}", [CapsuleController::class, "addOrUpdateCapsule"]);
         Route::get('/mycapsules', [CapsuleController::class, 'getMyCapsules']);
         Route::post('/locations', [LocationController::class, 'store']);

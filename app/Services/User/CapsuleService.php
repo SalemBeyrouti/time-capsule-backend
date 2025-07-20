@@ -2,7 +2,9 @@
 
 namespace App\Services\User;
 
+use App\Models\Tag;
 use App\Models\Capsule;
+
 
 class CapsuleService
 {
@@ -12,14 +14,16 @@ class CapsuleService
     public static function getAllCapsules($id = null)
     {
         if (!$id) {
-            return Capsule::all();
+            return Capsule::with(['tags', 'media', 'location'])->get();
         }
-        return Capsule::find($id);
+        return Capsule::with(['tags', 'media', 'location']) -> find($id);
         
     }
 
     public static function getUserCapsules($userId) {
-        return Capsule::where('user_id', $userId)->get();
+       return Capsule::with(['tags', 'media', 'location'])
+        ->where('user_id', $userId)
+        ->orderBy('created_at', 'desc') ->get();
     }
 
     static function createOrUpdateCapsule($data, $capsule, $user){
@@ -33,7 +37,17 @@ class CapsuleService
         $capsule->cover_image_url = $data['cover_image_url'] ?? $capsule->cover_image_url;
         $capsule->save();
 
-        return $capsule;
+        if(isset($data['tags']) && is_array($data['tags'])) {
+            $tagIds = [];
+
+            foreach ($data['tags'] as $tagName) {
+                $tag = Tag::firstOrCreate(['name' => $tagName]);
+                $tagIds[] = $tag->id;
+            }
+            $capsule->tags()->sync($tagIds);
+        }
+
+        return Capsule::with('tags')->find($capsule->id);
 
     }
 }

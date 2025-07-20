@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Models\Location;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,5 +17,9 @@ class Capsule extends Model
 
     public function media(){
         return $this->hasMany(Media::class);
+    }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class, 'capsule_tag');
     }
 }
