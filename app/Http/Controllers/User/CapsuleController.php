@@ -55,4 +55,13 @@ class CapsuleController extends Controller
         $capsule = CapsuleService::createOrUpdateCapsule($request->all(), $capsule, $user);
         return $this->responseJSON($capsule);
     }
+
+    function getPrivateCapsules() {
+        $user = Auth::user();
+        if(!$user) {
+            return $this->responseJSON("unauthorized", 404);
+        }
+        $capsules = CapsuleService::getPrivateUserCapsule($user->id, 'private');
+        return $this->responseJSON($capsules);
+    }
 }

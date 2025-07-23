@@ -93,4 +93,20 @@ class CapsuleService
         ->values();
     }
 
+    static function getPrivateUserCapsule($userId, $visibility) {
+        return Capsule::where('user_id', $userId)
+        ->where('visibility', $visibility)
+        ->where('revealed_at', '<=', now())
+        ->get();
+    }
+
+    static function getUnlistedCapsuleById($id) {
+         return Capsule::with(['tags', 'media', 'location', 'user'])
+         ->where('id', $id)
+         ->where('visibility', 'unlisted')
+         ->where('revealed_at', '<=', now())
+         ->first();
+    
+    }
+
 };
