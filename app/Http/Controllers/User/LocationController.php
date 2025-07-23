@@ -25,4 +25,11 @@ class LocationController extends Controller
         $capsules = LocationService::getCapsulesByCountry($country);
         return  $this->responseJSON($capsules);
     }
+
+    public function getAvailableCountries() {
+        $countries = LocationService::getAvailableCountries();
+        return $this->responseJSON($countries);
+    }
+
+
 }

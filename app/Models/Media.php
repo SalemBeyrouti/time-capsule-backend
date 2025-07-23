@@ -10,6 +10,7 @@ class Media extends Model
     protected $fillable = [
     'capsule_id',
     'type',
+    'purpose',
     'url',
     'content',
 ];

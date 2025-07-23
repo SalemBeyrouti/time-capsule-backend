@@ -20,13 +20,13 @@ class CapsuleFactory extends Factory
     {
         return [ 
             'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
-            "title" => $this->faker->unique()->words(3, true),
-            "message" => $this->faker->paragraph,
-            "is_surprise"=> false,
-            "revealed_at"=>$this->faker->dateTime(),
-            "emoji"=>$this->faker->unique()->words(3, true),
-            "color"=>$this->faker->safeColorName,
-            "cover_image_url"=>$this->faker->imageUrl(),
+            "title" => $this->faker->realText(),
+            "message" => $this->faker->realText(180),
+            "is_surprise"=>$this-> faker->boolean(30),
+            "revealed_at"=>$this->faker->dateTimeBetween('-1 month', 'now'),
+            "emoji"=>null,
+            "color"=>$this->faker->hexColor(),
+            "cover_image_url"=>$this->faker->boolean(50) ?'https://picsum.photos/seed/' . $this->faker->uuid() . '/640/480' : null,
 
         ];
     }

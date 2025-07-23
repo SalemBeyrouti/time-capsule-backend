@@ -45,4 +45,21 @@ class LocationService
         })
         ->with ('location') ->latest() -> get();
     }
+
+    static function getAvailableCountries(){
+         return Capsule::with('location')
+         ->where('visibility', 'public')
+         ->where('revealed_at', '<=', now())
+         ->whereHas('location', function ($q)  {
+            $q->whereNotNull('country');})
+         ->get()
+         ->pluck('location.country')
+         ->filter()
+         ->unique()
+          ->values();
+    }
 }
+
+
+    
+

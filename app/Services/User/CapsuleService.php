@@ -4,13 +4,12 @@ namespace App\Services\User;
 
 use App\Models\Tag;
 use App\Models\Capsule;
+use App\Traits\ResponseTrait;
 
 
 class CapsuleService
 {
-    /**
-     * Create a new class instance.
-     */
+   
     public static function getAllCapsules($id = null)
     {
         if (!$id) {
@@ -50,9 +49,13 @@ class CapsuleService
         return Capsule::with('tags')->find($capsule->id);
 
     }
+    
+    
 
     static function getPublicWallCapsules($filters = []) {
+
         $query = Capsule::with(['tags', 'media', 'location', 'user']) -> where('visibility', 'public') -> where('revealed_at', '<=', now());
+     
 
         if ($country = $filters['country'] ?? null) {
          $query->whereRelation('location', 'country', $country);
@@ -61,7 +64,6 @@ class CapsuleService
         if($mood = $filters['mood'] ?? null) {
             $query->where('emoji', $mood);
         }
-
         if (!empty($filters['start_date']) && !empty($filters['end_date'])) {
          $query->whereBetween('revealed_at', [
          $filters['start_date'],
@@ -69,13 +71,25 @@ class CapsuleService
          ]);
         }
 
-        $capsules = $query->latest()->paginate(9);
+        $paginated = (clone $query)->latest()->paginate(9);
 
-        $formatted = $capsules ->getCollection()->map(function ($capsule) {
+        $formatted = $paginated ->getCollection()->map(function ($capsule) {
             return $capsule->formatCapsulePreview();
         });
-        $capsules->setCollection($formatted);
-        return $capsules;
+        $paginated->setCollection($formatted);
+        
+        return $paginated;
 
     }
-}
+
+    static function getAvailableMoods() {
+        return Capsule::where('visibility', 'public')
+        ->where('revealed_at', '<=', now())
+        ->whereNotNull('emoji')
+        ->pluck('emoji')
+        ->filter()
+        ->unique()
+        ->values();
+    }
+
+};
