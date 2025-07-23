@@ -7,6 +7,7 @@ use App\Http\Controllers\Common\AuthController;
 use App\Http\Controllers\User\CapsuleController;
 use App\Http\Controllers\User\LocationController;
 use App\Http\Controllers\User\PublicWallController;
+use App\Http\Controllers\User\CapsuleExportController;
 
 
 
@@ -29,6 +30,7 @@ Route::group(["prefix" => "v0.1"], function () {
         Route::get('/capsule/{capsuleId}/media', [MediaController::class, 'getMedia']);
         Route::get('/public-wall', [PublicWallController::class, 'index']);
         Route::get('/public-wall/moods', [PublicWallController::class, 'moods']);
+        Route::get('/capsules/{id}/export', [CapsuleExportController::class, 'downloadCapsuleZip']);
 
 
 
