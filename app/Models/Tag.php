@@ -13,6 +13,6 @@ class Tag extends Model
     protected $fillable=['name'];
 
     function capsules() {
-        return $this->belongsToMany(Capsule::class, 'capsule_tag');
+        return $this->belongsToMany(Capsule::class, 'capsule_tag')->withTimesatmps();
     }
 }

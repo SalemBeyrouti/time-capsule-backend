@@ -34,6 +34,7 @@ class CapsuleService
         $capsule->emoji = $data['emoji'] ?? $capsule->emoji;
         $capsule->color = $data['color'] ?? $capsule->color;
         $capsule->cover_image_url = $data['cover_image_url'] ?? $capsule->cover_image_url;
+        $capsule->visibility = $data['visibility'] ?? $capsule->visibility;
         $capsule->save();
 
         if(isset($data['tags']) && is_array($data['tags'])) {

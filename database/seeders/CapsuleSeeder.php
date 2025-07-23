@@ -15,7 +15,6 @@ class CapsuleSeeder extends Seeder
      */
     public function run(): void
     {
-        echo "Running CapsuleSeeder...\n";
         Capsule::factory(20)->create();
     }
 }
